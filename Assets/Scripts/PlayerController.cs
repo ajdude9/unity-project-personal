@@ -6,23 +6,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float speed = 30;
+    private float speed = 600;
     private float jumpHeight = 5;
     private bool grounded = true;
     private Vector3 topPos;
     private Vector3 rightPos;
     private Vector3 leftPos;
     private Vector3 bottomPos;
-    Rigidbody playerRb; 
+    Rigidbody playerRb;
+    private GameObject focalPoint; 
 
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
-        topPos = new Vector3(0, 0.5f, 24.4f);
-        rightPos = new Vector3(-3, 0.5f, 0);
-        leftPos = new Vector3(-3, 0.5f, 0);
-        bottomPos = new Vector3(-3, 0.5f, 0);
+        focalPoint = GameObject.Find("Focal Point");
     }
 
     // Update is called once per frame
@@ -42,54 +40,21 @@ public class PlayerController : MonoBehaviour
     }
     void playerMovementHandler() //If the player presses a movement key, add force to them to move them in that direction
     {
-        if(Input.GetKey(KeyCode.W)){
-            playerRb.AddForce(Vector3.forward * speed * Time.deltaTime, ForceMode.VelocityChange);
-        }
-        if(Input.GetKeyUp(KeyCode.W)){
-            playerRb.AddForce(Vector3.forward / 2, ForceMode.VelocityChange);
-        }
-        if(Input.GetKey(KeyCode.A)){
-            playerRb.AddForce(Vector3.left * speed * Time.deltaTime,ForceMode.VelocityChange);
-        }
-        if(Input.GetKeyUp(KeyCode.A)){
-            playerRb.AddForce(Vector3.left / 2, ForceMode.VelocityChange);
-        }
-        if(Input.GetKey(KeyCode.S)){
-            playerRb.AddForce(Vector3.back * speed * Time.deltaTime, ForceMode.VelocityChange);
-        }
-        if(Input.GetKeyUp(KeyCode.S)){
-            playerRb.AddForce(Vector3.back / 2, ForceMode.VelocityChange);
-        }
-        if(Input.GetKey(KeyCode.D)){
-            playerRb.AddForce(Vector3.right * speed * Time.deltaTime, ForceMode.VelocityChange);
-        }
-        if(Input.GetKeyUp(KeyCode.D)){
-            playerRb.AddForce(Vector3.right / 2, ForceMode.VelocityChange);
-        }
-        if(Input.GetKeyDown(KeyCode.Space) && grounded){
-            grounded = false;
-            playerRb.AddForce(Vector3.up * jumpHeight, ForceMode.VelocityChange);
-        }
+        float forwardInput = Input.GetAxis("Vertical");
+        playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput * Time.deltaTime);
+        float horizontalInput = Input.GetAxis("RightLeft");
+        playerRb.AddForce(focalPoint.transform.right * speed * horizontalInput * Time.deltaTime);
     }
     void playerBarrierHandler() //If the player is OOB, stop them from moving.
     {
-        if (transform.position.z > 24.4f)
+        
+    }
+    // If Player collides with powerup, trigger powerup routines
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Powerup"))
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, 24.4f);
-            playerRb.velocity = Vector3.zero;
-        }
-        else
-        {
-            if (transform.position.z < -8.5)
-            {
-                transform.position = new Vector3(transform.position.x, transform.position.y, -8.5f);
-                playerRb.velocity = Vector3.zero;
-            }
-        }
-        if (transform.position.y < -5)
-        {
-            transform.position = new Vector3(0, 0.5f, 0);
-            playerRb.velocity = Vector3.zero;
+            Destroy(other.gameObject);            
         }
     }
 }
