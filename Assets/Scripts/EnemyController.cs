@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private float speed = 400;
+    private float speed = 4;
     private Rigidbody enemyRb;    
     private GameObject playerTarget;
 
@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour
     {
         // Set enemy direction towards player goal and move there
         Vector3 lookDirection = (playerTarget.transform.position - transform.position).normalized;
-        enemyRb.AddForce(lookDirection * speed * Time.deltaTime);
+        enemyRb.transform.Translate(lookDirection * speed * Time.deltaTime);
 
     }
 

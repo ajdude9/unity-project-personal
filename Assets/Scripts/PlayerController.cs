@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float speed = 600;
+    private float speed = 6;
     private float jumpHeight = 5;
     private bool grounded = true;
     private Vector3 topPos;
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         playerMovementHandler(); //Check to see if the player is moving
-        playerBarrierHandler(); //Check to see if the player is OOB
+        
         
     }
 
@@ -41,14 +41,11 @@ public class PlayerController : MonoBehaviour
     void playerMovementHandler() //If the player presses a movement key, add force to them to move them in that direction
     {
         float forwardInput = Input.GetAxis("Vertical");
-        playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput * Time.deltaTime);
+        playerRb.transform.Translate(focalPoint.transform.forward * speed * forwardInput * Time.deltaTime);
         float horizontalInput = Input.GetAxis("RightLeft");
-        playerRb.AddForce(focalPoint.transform.right * speed * horizontalInput * Time.deltaTime);
+        playerRb.transform.Translate(focalPoint.transform.right * speed * horizontalInput * Time.deltaTime);
     }
-    void playerBarrierHandler() //If the player is OOB, stop them from moving.
-    {
-        
-    }
+
     // If Player collides with powerup, trigger powerup routines
     private void OnTriggerEnter(Collider other)
     {

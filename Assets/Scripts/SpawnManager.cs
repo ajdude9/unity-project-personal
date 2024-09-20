@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
     {
         float xPos = Random.Range(-spawnRangeX, spawnRangeX);
         float zPos = Random.Range(-spawnRangeZ, spawnRangeZ);
-        return new Vector3(xPos, 3, zPos);
+        return new Vector3(xPos, 0, zPos);
     }
 
     void SpawnEntity(String entityName, int entityNum)
