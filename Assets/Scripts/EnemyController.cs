@@ -6,15 +6,14 @@ public class EnemyController : MonoBehaviour
 {
     private float speed = 400;
     private Rigidbody enemyRb;    
-    public GameObject playerTarget;
+    private GameObject playerTarget;
 
     // Start is called before the first frame update
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
         //GameObject playerTarget = GameObject.FindGameObjectWithTag("Player");
-        GameObject[] playerTargets = GameObject.FindGameObjectsWithTag("Player");
-        playerTarget = playerTargets[0];
+        playerTarget = GameObject.Find("Player");
     }
 
     // Update is called once per frame
